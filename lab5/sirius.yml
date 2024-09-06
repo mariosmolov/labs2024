@@ -1,0 +1,5 @@
+- name: Install consul
+  hosts: sirius_consul
+  become: yes
+  roles:
+    - consul
