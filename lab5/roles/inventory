@@ -1,0 +1,34 @@
+[pg1]
+192.168.56.181 consul_role=client consul_iface="enp0s8"
+[pg2]
+192.168.56.182 consul_role=client consul_iface="enp0s8"
+
+[consul1]
+192.168.56.191 consul_role=server consul_iface="enp0s8"
+[consul2]
+192.168.56.192 consul_role=server consul_iface="enp0s8"
+[consul3]
+192.168.56.193 consul_role=server consul_iface="enp0s8"
+
+[nfs]
+192.168.56.188
+
+[sirius:children]
+pg1
+pg2
+consul1
+consul2
+consul3
+nfs
+
+[sirius_consul:children]
+pg1
+pg2
+consul1
+consul2
+consul3
+
+[sirius_postgres:children]
+pg1
+pg2
+
