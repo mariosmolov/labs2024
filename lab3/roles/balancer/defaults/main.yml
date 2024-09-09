@@ -1,0 +1,3 @@
+---
+nginx_listen_port: 8080
+vrp: 172.16.98.100

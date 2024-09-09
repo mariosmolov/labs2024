@@ -1,0 +1,29 @@
+global
+   log /dev/log local0
+   log /dev/log local1 notice
+   chroot /var/lib/haproxy
+   stats timeout 30s
+   user haproxy
+   group haproxy
+   daemon
+
+defaults
+    log global
+    mode http
+    option httplog
+    option dontlognull
+    timeout connect 1s
+    timeout client 2s
+    timeout server 2s
+
+frontend http_front
+    bind *:80
+    stats uri /haproxy?stats
+    default_backend http_back
+
+backend http_back
+    balance roundrobin
+    mode http
+{% for item in groups['webservers'] %}
+    server {{hostvars[item]['inventory_hostname']}} {{ hostvars[item]['ansible_host']}}:{{nginx_listen_port}} check
+{% endfor %}

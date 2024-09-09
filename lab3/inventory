@@ -1,0 +1,7 @@
+[webservers]
+web1 ansible_host=172.16.98.136
+web2 ansible_host=172.16.98.137
+
+[balancers]
+haproxy1 ansible_host=172.16.98.138
+haproxy2 ansible_host=172.16.98.139

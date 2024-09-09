@@ -1,0 +1,17 @@
+---
+- name: Setup hosts
+  hosts: all
+  become: true
+  roles: 
+    - selinux
+- name: Setup webservers
+  hosts: webservers
+  become: true
+  roles:
+    - nginx 
+    - webserver
+- name: Setup balancers
+  hosts: balancers
+  become: true
+  roles:
+    - balancer

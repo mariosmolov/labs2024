@@ -1,0 +1,33 @@
+---
+- name: Install haproxy and keepalived
+  yum:
+    name: 
+      - haproxy
+      - keepalived
+    state: latest
+  tags:
+    - packages
+- name: Create haproxy config file
+  template:
+    src: haproxy.cfg.j2
+    dest: /etc/haproxy/haproxy.cfg
+  tags:
+    - haproxy-configuration
+  notify: Restart haproxy
+- name: Create keepalived config file
+  template:
+    src: keepalived.conf.j2
+    dest: /etc/keepalived/keepalived.conf
+  tags:
+    - keepalived-configuration
+  notify: Restart keepalived
+- name: Start haproxy
+  systemd:
+    name: haproxy
+    state: started
+    enabled: yes
+- name: Start keepalived
+  systemd:
+    name: keepalived
+    state: started
+    enabled: yes
