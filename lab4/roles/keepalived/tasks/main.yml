@@ -1,0 +1,20 @@
+---
+- name: Install keepalived
+  yum:
+    name: 
+      - keepalived
+    state: latest
+  tags:
+    - packages
+- name: Create keepalived config file
+  template:
+    src: keepalived.conf.j2
+    dest: /etc/keepalived/keepalived.conf
+  tags:
+    - keepalived-configuration
+  notify: Restart keepalived
+- name: Start keepalived
+  systemd:
+    name: keepalived
+    state: started
+    enabled: yes

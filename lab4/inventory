@@ -1,3 +1,3 @@
 [databases]
-pg1 ansible_host=172.16.98.140
-pg2 ansible_host=172.16.98.141
+pg1 ansible_host=172.16.98.151
+pg2 ansible_host=172.16.98.152

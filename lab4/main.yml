@@ -1,0 +1,27 @@
+---
+- name: Setup hosts
+  hosts: all
+  become: true
+  tags:
+    - setup_hosts
+  roles: 
+    - selinux
+    - keepalived
+- name: Setup master keepalived
+  hosts: pg1
+  become: true
+  vars:
+    is_master: true
+  roles: 
+    - keepalived
+
+- name: Setup PostgreSQL
+  hosts: databases
+  become: true
+  tags:
+    - postgres
+  tasks:
+    - name: Install PostgreSQL 15
+      dnf:
+        name: postgresql15-server
+        state: latest
