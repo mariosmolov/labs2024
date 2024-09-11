@@ -1,0 +1,8 @@
+---
+- name: Install nginx from repo
+  yum:
+    name: nginx
+    state: latest
+  tags:
+    - nginx-package
+    - packages

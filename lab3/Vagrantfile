@@ -21,25 +21,27 @@ MACHINES = {
 }
 
 Vagrant.configure("2") do |config|
-  MACHINES.each do |boxname, boxconfig|
-      config.vm.define boxname do |box|
-          box.vm.box = boxconfig[:box_name]
-          box.vm.host_name = boxname.to_s
-          box.vm.network "private_network", ip: boxconfig[:ip_addr]
-          box.vm.provider :virtualbox do |vb|
-            vb.customize ["modifyvm", :id, "--memory", "512"]
-          end
-          config.vm.provision "shell" do |s|
-			ssh_pub_key = File.readlines("/home/mario/.ssh/id_rsa.pub").first.strip
-			s.inline = <<-SHELL
-			mkdir -p /home/vagrant/.ssh
-			sudo mkdir -p /root/.ssh
-			echo #{ssh_pub_key} >> /home/vagrant/.ssh/authorized_keys
-			echo #{ssh_pub_key} >> /root/.ssh/authorized_keys
-            sed -i '65s/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
-            systemctl restart sshd
-			SHELL
-		  end
+      MACHINES.each do |boxname, boxconfig|
+            config.vm.define boxname do |box|
+                  box.vm.box = boxconfig[:box_name]
+                  box.vm.host_name = boxname.to_s
+                  box.vm.network "private_network", type: "dhcp"
+                  box.vm.provider "vmware_desktop" do |vb|
+                        vb.vmx["memory"] = "1024"
+                  end
+                  ssh_pub_key = File.readlines("/Users/dimagic/.ssh/redos732.pub").first.strip
+                  config.vm.provision "shell" do |s|
+                        s.inline = <<-SHELL
+                        mkdir -p /home/vagrant/.ssh
+                        sudo mkdir -p /root/.ssh
+                        echo #{ssh_pub_key} >> /home/vagrant/.ssh/authorized_keys
+                        echo #{ssh_pub_key} >> /root/.ssh/authorized_keys
+                        sed -i '65s/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
+                        systemctl restart sshd
+                        SHELL
+                  end
+            end
       end
-  end
 end
+    
+
