@@ -1,0 +1,17 @@
+FROM alpine:3.20.3
+
+LABEL maintainer="Dmitriy Latuta"
+
+RUN adduser -D -g 'www' www
+RUN mkdir /www && mkdir -p /var/lib/nginx && \
+    chown -R www:www /var/lib/nginx && \
+    chown -R www:www /www
+
+RUN apk update --no-cache && apk upgrade --no-cache
+RUN apk add --update --no-cache nginx 
+
+COPY index.html /www/index.html
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
